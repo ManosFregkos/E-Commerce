@@ -1,20 +1,48 @@
 import React from 'react';
 import { Switch ,Route} from 'react-router';
 import './App.css';
-import HomePage from './pages/homepage/homepage.component'
+import HomePage from './pages/homepage/homepage/homepage.component.jsx'
 import ShopPage from './pages/homepage/shop/shop.component.jsx'
 import Header from './components/header/header.component.jsx'
+import SignInAndSignOutPage from './pages/homepage/sign-in-and-sign-out/sign-in-and-sign-out.component.jsx'; 
+import {auth} from './firebase/firebase.utils';
 
-function App() {
-  return (
-    <div >
-      <Header />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route  path="/shop" component={ShopPage} />
-      </Switch>
-    </div>
-  );
+class App extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      currentUser: null
+    }
+  }
+  unsubscribeFromAuth = null;
+
+  //otan anoiksei to App iparxei ena open subscription sto opoio mporoume na log ton last user
+  componentDidMount(){
+    this.unsubscribeFromAuth= auth.onAuthStateChanged(user => {
+      this.setState({currentUser : user});
+      console.log(user); //mas epistrefei ton teleutaio logged in user stin firebase
+    })
+  }
+
+  //kleinei to unsubcription to user
+  //wste na allazei ksana to popUp logIn
+  componentWillUnmount(){
+    this.unsubscribeFromAuth();
+  }
+
+  render(){
+    return (
+      <div >
+        <Header currentUser={this.state.currentUser}/>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route  path="/shop" component={ShopPage} />
+          <Route path="/signin" component={SignInAndSignOutPage} />
+        </Switch>
+      </div>
+    );
+  }
 }
 
 export default App;
