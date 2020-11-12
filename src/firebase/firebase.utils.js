@@ -23,8 +23,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   //kanw ena reference user sto users/"kai to userAuthId pou m dinei to google"
   const userRef = firestore.doc(`users/${userAuth.uid}`);
 
-  console.log(userRef);
-
   
   const snapShot = await userRef.get();
 
