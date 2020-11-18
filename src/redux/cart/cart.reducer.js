@@ -23,7 +23,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         return {
             ...state,
             cartItems: removeItemFromCart(state.cartItems,action.payload)
-        }
+        };
 
     case CartActionTypes.CREAR_ITEM_FROM_CART:
       return {
